@@ -4,48 +4,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int ans[50005][18] = {};
-int d[50005] = {};
-int depth(int node, vector<int> &parent)
+const int N = 50005 ;
+const int Log = 18 ;
+int up[N][Log] = {};
+
+int depth[N] = {};
+int dfs(int node, vector<int> &parent)
 {
-      if ( node == -1 )
-            return -1;
-      if ( d[node] != -1 )
-            return d[node];
-      return d[node] = 1 + depth(parent[node], parent);
+      if ( node == 0 )
+            return 0 ;
+      if ( depth[node] != -1 )
+            return depth[node];
+      return depth[node] = 1 + dfs(parent[node], parent);
 }
 void TreeAncestor( int n, vector<int> &parent )
 {
-      memset(ans, -1, sizeof ans);
-      memset(d, -1, sizeof d);
+      memset(depth, -1, sizeof depth);
 
       for (int i = 0; i < n; i++)
-            if ( d[i] == -1 )
-                  d[i] = depth(i, parent);
+            if ( depth[i] == -1 )
+                  depth[i] = dfs(i, parent);
 
-      for ( int i = 0 ; i < n ; i++ )
-            ans[i][0] = parent[i] ;
+      up[0][0] = 0 ;
+      for ( int i = 1 ; i < n ; i++ )
+            up[i][0] = parent[i] ;
       
       for ( int j = 1 ; j < 18 ; j++ )
       {
             for ( int i = 0 ; i < n ; i++ )
             {
-                  if ( ans[i][j-1] != -1 )
-                        ans[i][j] = ans[ans[i][j - 1]][j - 1];
+                  up[i][j] = up[up[i][j - 1]][j - 1];
             }
       }
 }
-
 int getKthAncestor(int node, int k)
 {
-      if ( k > d[node] )
+      if ( k > depth[node] )
             return -1 ;
 
       for (int i = 17; i >= 0; i--)
       {
             if ( k & (1 << i) )
             {
-                  node = ans[node][i];
+                  node = up[node][i];
             }
       }
       return node;
