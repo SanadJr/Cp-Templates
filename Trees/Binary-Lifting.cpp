@@ -29,7 +29,7 @@ void TreeAncestor( int n, vector<int> &parent )
       for ( int i = 1 ; i < n ; i++ )
             up[i][0] = parent[i] ;
       
-      for ( int j = 1 ; j < 18 ; j++ )
+      for ( int j = 1 ; j < Log ; j++ )
       {
             for ( int i = 0 ; i < n ; i++ )
             {
@@ -42,7 +42,7 @@ int getKthAncestor(int node, int k)
       if ( k > depth[node] )
             return -1 ;
 
-      for (int i = 17; i >= 0; i--)
+      for (int i = Log-1; i >= 0; i--)
       {
             if ( k & (1 << i) )
             {
