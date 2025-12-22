@@ -10,17 +10,20 @@ int up[N][Log] = {};
 vector<int> adj[N];
 
 int depth[N] = {};
-void dfs(int node)
+void dfs(int node, int par)
 {
       for (auto &child : adj[node])
       {
-            depth[child] = depth[node] + 1;
-            up[child][0] = node; // The parent of the current node.
-            for (int j = 1; j < Log; j++)
+            if ( child != par )
             {
-                  up[child][j] = up[up[child][j - 1]][j - 1];
+                  depth[child] = depth[node] + 1;
+                  up[child][0] = node; // The parent of the current node.
+                  for (int j = 1; j < Log; j++)
+                  {
+                        up[child][j] = up[up[child][j - 1]][j - 1];
+                  }
+                  dfs(child, node);
             }
-            dfs(child);
       }
 }
 
