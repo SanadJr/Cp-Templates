@@ -29,7 +29,7 @@ void SparseTable( vector<int> &a ) // O ( n * log( n ) )
       }
 }
 
-int Query( int l, int r ) // O ( Log( n ) )
+int Log_Query( int l, int r ) // O ( Log( n ) )
 {
       int Len = r - l + 1 ;
       int res = INT_MAX ;
@@ -44,7 +44,7 @@ int Query( int l, int r ) // O ( Log( n ) )
       return res ;
 }
 
-int SpecialQuery( int l, int r ) // O ( 1 )
+int One_Query( int l, int r ) // O ( 1 )
 {
       /*
             Works only for idempotent associative operations,
