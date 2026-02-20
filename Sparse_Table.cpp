@@ -50,11 +50,11 @@ int One_Query( int l, int r ) // O ( 1 )
             Works only for idempotent associative operations,
             where overlapping segments do not affect the result.
             - Works on ( Minimum, Maximum, Gcd, And, Or, .... ).
-            - Doesn't works on ( Sum, XOR, Product ...... ).
+            - Doesn't work on ( Sum, XOR, Product ...... ).
       */
 
       int Len = r - l + 1 ;
-      int k = 31 - __builtin_clz( Len ) ; // K indicates the log of Len, You can also use a precalculate method for logs.
+      int k = 31 - __builtin_clz( Len ); // K indicates the log of Len. You can also use a pre-calculation method for logs.
       int res = operation( Ans[l][k], Ans[r-(1<<k)+1][k] ) ;
       return res ;
 }
