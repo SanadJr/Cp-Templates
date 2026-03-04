@@ -22,45 +22,45 @@ public:
             tree.assign(2 * Size, Default);
       }
 
-      Node operation(Node x, Node y)
+      Node merge(Node x, Node y)
       {
             Node New;
             New.value = x.value + y.value;
             return New;
       }
-      void set(int idx, T value, int id, int l, int r)
+      void set(int idx, T value, int id, int lx, int rx)
       {
-            if (l == r)
+            if ( lx == rx )
             {
                   tree[id].value = value;
                   return;
             }
-            int mid = (l + r) / 2;
+            int mid = (lx + rx) / 2;
             if (idx <= mid)
-                  set(idx, value, 2 * id, l, mid);
+                  set(idx, value, 2 * id, lx, mid);
             else
-                  set(idx, value, 2 * id + 1, mid + 1, r);
+                  set(idx, value, 2 * id + 1, mid + 1, rx);
 
-            tree[id] = operation(tree[2 * id], tree[2 * id + 1]);
+            tree[id] = merge(tree[2 * id], tree[2 * id + 1]);
       }
       void set(int idx, T value)
       {
             set(idx, value, 1, 1, Size);
       }
 
-      Node get(int lx, int rx, int id, int l, int r)
+      Node get(int l, int r, int id, int lx, int rx)
       {
-            if (rx < l || r < lx)
+            if ( rx < l || lx > r )
                   return Default;
-            if (lx <= l && r <= rx)
+            if ( lx >= l && rx <= r )
             {
                   return tree[id];
             }
 
-            int mid = (l + r) / 2;
-            Node x = get(lx, rx, 2 * id, l, mid);
-            Node y = get(lx, rx, 2 * id + 1, mid + 1, r);
-            return operation(x, y);
+            int mid = (lx + rx) / 2;
+            Node x = get(l, r, 2 * id, lx, mid);
+            Node y = get(l, r, 2 * id + 1, mid + 1, rx);
+            return merge(x, y);
       }
       T get(int l, int r)
       {
