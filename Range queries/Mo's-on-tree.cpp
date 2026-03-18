@@ -18,11 +18,15 @@ const int SQ = 500 ;
 struct query
 {
       int l, r, Lca, idx;
+      pair<int,int> topair() const 
+      {
+            return { l / SQ, ( ( l / SQ ) & 1 ) ? -r : +r } ;
+      }
       bool operator<( const query &other)
       {
-            if (l / SQ == other.l / SQ)
-                  return r < other.r;
-            return l / SQ < other.l / SQ;
+            pair<int,int> F = this->topair() ;
+            pair<int,int> S = other.topair() ;
+            return F < S ;
       }
 };
 template< typename T >
