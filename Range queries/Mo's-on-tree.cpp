@@ -71,7 +71,6 @@ struct MoTree
             dfs( root, 0, cnt ) ;
       }
 
-      
       void CoComp ( vector<int> &a )
       {
             map<int,bool> mp ;
