@@ -1,25 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
- 
-template < typename T >
-using ordered_set = tree < T, null_type, less < T >,
-rb_tree_tag, tree_order_statistics_node_update >;
- 
-template < typename T >
-using ordered_multiset = tree < T, null_type, less_equal < T >,
-rb_tree_tag, tree_order_statistics_node_update >;
- 
-#define min_nums(n) st.order_of_key(n)
-#define value(n) st.find_by_order(n)
 #define ll long long
 #define int long long
-#define ull unsigned long long
-#define input(v) for ( auto &x : v ) cin >> x
-#define output(v) for ( auto &x : v ) cout << x << " "; 
 #define all(v) v.begin(), v.end()
 #define x first
 #define y second
@@ -67,83 +50,42 @@ struct shash
                   return pref[r+1] ;
             return ( ( ( ( pref[r+1] - pref[l] + mod ) % mod ) * invpw[l] ) % mod ) ;
       }
+      // Returns the change without save it!
+      int change(int idx, int val) 
+      {
+            int res ;
+
+            if ( idx == 0 ) 
+            {
+                  if ( n == 1 )
+                        res = val % mod ;
+                  else
+                  {
+                        int suf = get(1, n-1 ) ;
+                        res  = ( val + suf * pw[1] ) % mod ;
+                  }
+            }
+            else if ( idx == n-1 ) 
+            {
+                  if ( n == 1 )
+                        res = val % mod ;
+                  else
+                  {
+                        int pre = get(0, n-2);
+                        res  = ( pre + val * pw[n-1] ) % mod ;
+                  }
+            }
+            else 
+            {
+                  int pre = get( 0, idx - 1 ) ;
+                  int suf = get(idx + 1, n - 1 ) ;
+                  int len = n - idx;
+
+                  res = ( pre + ( val * pw[idx] ) % mod + ( suf * pw[idx+1] ) % mod ) % mod ;
+            }
+            return res;
+      }
+      
 } ;
-void solve()
-{
-      // cin >> n ;
-      string s, m ;
-      cin >> s ;
-      int n = s.size() ;
-      m = s ;
-      reverse( all( m ) ) ;
-
-      const int Mod1 = 1e9 + 7, Mod2 = 1e9 + 9 ;
-      const int Base1 = rand( 28, 1e9 ), Base2 = rand( 28, 1e9 ) ;
-      
-      shash HashS1 ( s, Mod1, Base1 ) ;
-      shash HashS2 ( s, Mod2, Base2 ) ;
-      shash HashM1 ( m, Mod1, Base1 ) ;
-      shash HashM2 ( m, Mod2, Base2 ) ;
-
-      int pos = 0 ;
-      int ans = 1 ;
-      for ( int i = 0 ; i < n-1 ; i++ )
-            if ( s[i] == s[i+1] )
-            {
-                  pos = i ;
-                  ans = 2 ;
-            }
-      
-      for ( int i = 1 ; i < n-1 ; i++ )
-      {
-            int l = 1, r = min( i, n - i - 1 ), res = 0 ;
-            while ( l <= r )
-            {
-                  int mid = ( l + r ) / 2 ;
-                  if ( ( HashS1.get( i-mid, i-1 ) == HashM1.get( n-i-mid-1 , n - i - 2 ) ) && ( HashS2.get( i-mid, i-1 ) == HashM2.get( n-i-mid-1 , n - i - 2 ) ) )
-                        res = mid, l = mid + 1 ;
-                  else
-                        r = mid - 1 ;
-            }
-            if ( res * 2 + 1 > ans )
-                  pos = i - res ;
-            ans = max( ans, res * 2 + 1 ) ;
-      }
-
-      for ( int i = 1 ; i < n-2 ; i++ )
-      {
-            if ( s[i] != s[i+1] )
-                  continue ;
-            int l = 1, r = min( i, n - i ), res = 0 ;
-            while ( l <= r )
-            {
-                  int mid = ( l + r ) / 2 ;
-                  if ( ( HashS1.get( i-mid, i-1 ) == HashM1.get( n-i-mid-2 , n - i - 3 ) ) && ( HashS2.get( i-mid, i-1 ) == HashM2.get( n-i-mid-2 , n - i - 3 ) ) )
-                        res = mid, l = mid + 1 ;
-                  else
-                        r = mid - 1 ;
-            }
-            if ( res * 2 + 2 > ans )
-                  pos = i - res ;
-            ans = max( ans, res * 2 + 2 ) ;
-      }
-      
-      cout << s.substr( pos, ans ) ;
-
-}
-signed main ()
-{
-
-    ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    #ifndef ONLINE_JUDGE
-        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-    #endif
-
-   int t=1;
-//    cin >> t;
-   while(t--)
-   {
-    solve();
-    cout << "\n" ;
-   }
-}
+const int Mod = 1e9 + 7, Mod2 = 1e9 + 9 ;
+const int Base = rand( 28, 1e9 ), Base2 = rand( 29, 1e9 ) ;
