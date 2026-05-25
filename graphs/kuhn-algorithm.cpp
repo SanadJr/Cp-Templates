@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// o( n * m )
+// O( n * m )
 int n, m, k ;
 vector<int> adj[505] ;
 int match[505] ;
@@ -43,6 +43,17 @@ void solve()
                   res++ ;
       }
 
-      cout << res ;
-
+      cout << res << '\n' ; // Maximum matching
+      for ( int i = 1 ; i <= m ; i++ )
+      {
+            if ( match[i] != -1 )
+            {
+                  cout << match[i] << " " << i << '\n' ;
+            }
+      }
+}
+int main()
+{
+      ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+      solve() ;
 }
